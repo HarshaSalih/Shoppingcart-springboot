@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ShoppingDao extends CrudRepository<Shopping,String> {
 
-    @Query(value = "SELECT `id`, `category`, `description`, `image`, `name`, `price` FROM `shopping` WHERE `name`= :name",nativeQuery = true)
+    @Query(value = "SELECT `id`, `category`, `description`, `image`, `name`, `price` FROM `shopping` WHERE `name`LIKE %:name%",nativeQuery = true)
     List<Shopping>SearchProduct(@Param("name")String name);
 
 }
