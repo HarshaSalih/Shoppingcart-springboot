@@ -2,11 +2,13 @@ package com.example.shoppingcart_backend.controller;
 
 import com.example.shoppingcart_backend.dao.ShoppingDao;
 import com.example.shoppingcart_backend.model.Shopping;
+import com.example.shoppingcart_backend.model.UserRegistration;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @RestController
 
@@ -15,26 +17,38 @@ public class ShoppingController {
     @Autowired
     private ShoppingDao dao;
 
-    @PostMapping("/add")
-    public String AddProduct(@RequestBody Shopping s)
+    @CrossOrigin(origins = "*")
+
+    @PostMapping(path = "/add",consumes = "application/json",produces = "application/json")
+    public Map<String,String> AddProduct(@RequestBody Shopping s)
     {
         System.out.println(s.getName().toString());
         System.out.println(s.getCategory().toString());
         System.out.println(s.getDescription().toString());
         dao.save(s);
-        return "Product added successfully";
+        HashMap<String,String>map=new HashMap<>();
+        map.put("status","success");
+        return map;
     }
 
+    @CrossOrigin(origins = "*")
     @GetMapping("/view")
-    public String ViewProduct()
+    public List<Shopping> ViewProduct()
     {
-        return "Welcome to view product page";
+        return (List<Shopping>)dao.findAll();
     }
 
-    @PostMapping("/search")
-    public String SearchProduct()
+    @CrossOrigin(origins = "*")
+    @PostMapping(path = "/search",consumes = "application/json",produces = "application/json")
+    public List<Shopping> SearchProduct(@RequestBody Shopping s)
     {
-        return "Welcome to search product page";
+        String name=s.getName();
+        System.out.println(name);
+        return (List<Shopping>) dao.SearchProduct(s.getName());
     }
+
+
+
+
 
 }
